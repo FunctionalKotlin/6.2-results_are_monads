@@ -3,12 +3,7 @@
 typealias Validator<T, E> = (T) -> Result<T, E>
 
 infix operator fun <T, E> (Validator<T, E>).plus(validator: Validator<T, E>): Validator<T, E> = {
-    val result = this(it)
-
-    when(result) {
-        is Success -> validator(it)
-        is Failure -> result
-    }
+    this(it).flatMap(validator)
 }
 
 infix fun <A, E> (Validator<A, E>).or(validator: Validator<A, E>): Validator<A, E> = {
