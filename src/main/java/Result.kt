@@ -11,6 +11,11 @@ fun <A, E, B> Result<A, E>.map(transform: (A) -> B): Result<B, E> = when(this) {
     is Failure -> Failure(error)
 }
 
+fun <A, E, B> Result<A, E>.flatMap(transform: (A) -> Result<B, E>): Result<B, E> = when(this) {
+    is Success -> transform(value)
+    is Failure -> Failure(error)
+}
+
 fun <A, E> Result<A, E>.ifSuccess(execute: (A) -> Unit) {
     if (this is Success) execute(this.value)
 }
